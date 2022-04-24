@@ -1,23 +1,27 @@
 use anchor_lang::prelude::*;
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+declare_id!("6ueBxDoKpoEDLXfAEz8rQEcNPQjwutysgx3JoKGnRNnv");
 
 #[program]
 mod basic_2 {
     use super::*;
 
-    pub fn create(ctx: Context<Create>, authority: Pubkey, num:u64) -> Result<()> {
+    pub fn create(ctx: Context<Create>, authority: Pubkey) -> Result<()> {
         let counter = &mut ctx.accounts.counter;
         counter.authority = authority;
-        counter.count = num;
-        msg!("Working : {}", counter.count);
+        counter.count = 0;
+        Ok(())
+    }
+    
+    pub fn initializex(_ctx: Context<Initialize>, num:u64) -> Result<()> {
+        msg!("Number x: {}", num);
         Ok(())
     }
 
-    pub fn increment(ctx: Context<Increment>) -> Result<()> {
+    pub fn increment(ctx: Context<Increment>, num:u64) -> Result<()> {
         let counter = &mut ctx.accounts.counter;
-        counter.count += 1;
-        msg!("El numero es: {}",counter.count );
+        counter.count += num;
+        msg!("{}",counter.count);
         Ok(())
     }
 }
@@ -43,3 +47,6 @@ pub struct Counter {
     pub authority: Pubkey,
     pub count: u64,
 }
+
+#[derive(Accounts)]
+pub struct Initialize {}
